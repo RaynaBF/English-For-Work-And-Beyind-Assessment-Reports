@@ -11,7 +11,8 @@ usage:
   build_assessment.py --page ARTIFACT_INDEX_HTML --seed DIR_WITH_RECORDS --codes CODES_JSON --out REPO_DIR
 
 CODES_JSON stays outside the repository. Format:
-  { "<record id>": { "static": "<code used in the Pages link>", "file": "<record>.json" } }
+  { "<record id>": { "static": "<code used in the link>" or ["<code>", ...], "file": "<record>.json" } }
+Codes are matched lowercase; prefer letters and digits that cannot be mixed up (no 0/o, 1/l/i).
 """
 import argparse
 import base64
@@ -53,6 +54,8 @@ DATA_JS = r"""  /* ---------- data: one encrypted file per assessment ----------
     var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(pk.iv) }, key, unb64(pk.ct));
     return JSON.parse(DEC.decode(plain));
   }
+  /* codes are case-insensitive and ignore spaces, so a typed code still opens */
+  function norm(s) { return decodeURIComponent(String(s || '')).replace(/^.*#/, '').replace(/\s+/g, '').toLowerCase(); }
   /* without a code in the link: let the reader paste the code or the full link */
   function askCode(bad) {
     $('msg').innerHTML = '<strong>Open your report</strong>' +
@@ -65,13 +68,13 @@ DATA_JS = r"""  /* ---------- data: one encrypted file per assessment ----------
     show('msg');
     $('code-form').addEventListener('submit', function (e) {
       e.preventDefault();
-      var v = $('code-in').value.trim();
-      var m = /#?([a-z0-9][a-z0-9-]{9,60})\s*$/i.exec(v);
-      if (m) location.hash = '#' + m[1];
+      var v = norm($('code-in').value);
+      if (/^[a-z0-9][a-z0-9-]{9,60}$/.test(v)) { if (norm(location.hash) === v) route(); else location.hash = '#' + v; }
+      else { $('code-in').setAttribute('aria-invalid', 'true'); $('code-in').focus(); }
     });
   }
   function route() {
-    var code = (location.hash || '').replace(/^#/, '');
+    var code = norm(location.hash);
     $('all-link').hidden = true;
     S.doc = null; S.ready = false; S.mode = 'report';
     if (!/^[a-z0-9][a-z0-9-]{9,60}$/i.test(code)) {
@@ -84,7 +87,7 @@ DATA_JS = r"""  /* ---------- data: one encrypted file per assessment ----------
     }
     message('Loading the assessment', 'This takes a few seconds.');
     openReport(code).then(function (doc) {
-      if (code !== (location.hash || '').replace(/^#/, '')) return;
+      if (code !== norm(location.hash)) return;
       S.doc = Object.assign({}, doc, { _id: code });
       S.ready = true;
       paintReport();
@@ -147,10 +150,12 @@ def main():
     keep = set()
     for rec_id, info in codes.items():
         doc = json.load(open(os.path.join(a.seed, info['file']), encoding='utf-8'))
-        fid, pk = pack(info['static'], doc)
-        keep.add(fid + '.json')
-        json.dump(pk, open(os.path.join(data_dir, fid + '.json'), 'w'))
-        print('wrote data/%s.json  (%s)' % (fid, rec_id))
+        statics = info['static'] if isinstance(info['static'], list) else [info['static']]
+        for code in statics:
+            fid, pk = pack(code.lower(), doc)
+            keep.add(fid + '.json')
+            json.dump(pk, open(os.path.join(data_dir, fid + '.json'), 'w'))
+            print('wrote data/%s.json  (%s)' % (fid, rec_id))
     for f in os.listdir(data_dir):  # drop files of assessments that were removed
         if f.endswith('.json') and f not in keep:
             os.remove(os.path.join(data_dir, f))
