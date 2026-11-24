@@ -53,12 +53,29 @@ DATA_JS = r"""  /* ---------- data: one encrypted file per assessment ----------
     var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(pk.iv) }, key, unb64(pk.ct));
     return JSON.parse(DEC.decode(plain));
   }
+  /* without a code in the link: let the reader paste the code or the full link */
+  function askCode(bad) {
+    $('msg').innerHTML = '<strong>Open your report</strong>' +
+      '<p>Paste the code you received (or the full link) to open the report.</p>' +
+      '<form id="code-form" style="display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-top:1rem">' +
+      '<label for="code-in" style="position:absolute;left:-9999px">Report code</label>' +
+      '<input id="code-in" autocomplete="off" spellcheck="false" placeholder="e.g. cpto-xxxxxxxxxxxxxx" style="flex:1 1 16rem;max-width:22rem;padding:.5rem .7rem;border:1px solid var(--line);border-radius:.5rem;background:var(--card);color:var(--fg);font:inherit">' +
+      '<button type="submit" style="border:0;border-radius:.5rem;padding:.5rem 1rem;background:var(--navy);color:var(--navy-fg);font:inherit;font-weight:600;cursor:pointer">Open</button></form>' +
+      (bad ? '<p style="margin-top:.6rem;color:var(--muted);font-size:.85rem">That code is not complete. Check that you copied all of it.</p>' : '');
+    show('msg');
+    $('code-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = $('code-in').value.trim();
+      var m = /#?([a-z0-9][a-z0-9-]{9,60})\s*$/i.exec(v);
+      if (m) location.hash = '#' + m[1];
+    });
+  }
   function route() {
     var code = (location.hash || '').replace(/^#/, '');
     $('all-link').hidden = true;
     S.doc = null; S.ready = false; S.mode = 'report';
     if (!/^[a-z0-9][a-z0-9-]{9,60}$/i.test(code)) {
-      message('Open your personal link', 'The link you received ends in your own code. Use that link to see the report.');
+      askCode(code);
       return;
     }
     if (!(window.crypto && window.crypto.subtle)) {
