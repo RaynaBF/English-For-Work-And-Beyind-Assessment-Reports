@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:,">
+<title>English Assessment Reports</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: same system as English for Work Reports. One full-bleed brand band, then a 56rem reading column:
+   section tabs, then the open section as cards (level card with A1-C2 scale, CEFR table, domains, evidence, notes). */
+:root {
+  --bg: #f5f5f5; --card: #ffffff; --line: #e0e0e0; --track: #dcdfe3;
+  --fg: #0a1128; --fg2: #3b4557; --muted: #667084;
+  --band: #4e657b; --band-fg: #ffffff; --band-sub: #e8d3b0;
+  --navy: #1c4562; --navy-fg: #ffffff; --accent: #1c4562; --bar: #1c4562; --tab: #e8e8e8;
+  --gold: #cdad7d; --gold-fg: #0a1128; --chip: #e3edf5; --chip-fg: #1c4562;
+  --good: #2d6a4f; --mid-fg: #6b4a14; --focus: #1c4562; --bad: #a8372a; --bad-bg: #f7e4e0;
+  --font: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f151d; --card: #18212c; --line: #2a3646; --track: #2c3847;
+    --fg: #eaeff5; --fg2: #b8c3d1; --muted: #8c99ab;
+    --band: #33495c; --navy: #2d6a94; --accent: #8fc2e8; --bar: #62a6d4; --tab: #222e3c;
+    --chip: #21364a; --chip-fg: #a9d1ee; --good: #7fc8a3; --mid-fg: #e8c987; --focus: #8fc2e8;
+    --bad: #f0988a; --bad-bg: #3d2420; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f151d; --card: #18212c; --line: #2a3646; --track: #2c3847;
+  --fg: #eaeff5; --fg2: #b8c3d1; --muted: #8c99ab;
+  --band: #33495c; --navy: #2d6a94; --accent: #8fc2e8; --bar: #62a6d4; --tab: #222e3c;
+  --chip: #21364a; --chip-fg: #a9d1ee; --good: #7fc8a3; --mid-fg: #e8c987; --focus: #8fc2e8;
+  --bad: #f0988a; --bad-bg: #3d2420; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p, ul, ol { margin: 0; }
+ul { padding: 0; list-style: none; }
+button, input, textarea { font: inherit; color: inherit; }
+a { color: var(--accent); overflow-wrap: anywhere; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 56rem; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* Brand band */
+.band { background: var(--band); color: var(--band-fg); padding-block: 1.75rem 1.5rem; text-align: center; }
+.wordmark { font-size: 1.05rem; font-weight: 500; line-height: 1.25; letter-spacing: .01em; }
+.wordmark span { color: var(--band-sub); }
+.band h1 { font-size: 1.9rem; font-weight: 700; line-height: 1.15; margin-top: .6rem; text-wrap: balance; }
+.meta { display: flex; flex-wrap: wrap; justify-content: center; gap: .25rem 1.5rem; margin-top: .75rem; font-size: .92rem; opacity: .93; }
+.meta li { min-width: 0; }
+.admin-link { display: inline-block; margin-top: .9rem; font-size: .82rem; color: var(--band-fg); opacity: .9; }
+.admin-link[hidden] { display: none; }
+main { padding-block: 1.5rem 3.5rem; }
+
+/* Tabs */
+.tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+.tab { border: 0; cursor: pointer; border-radius: .5rem; background: var(--tab); color: var(--fg); font-weight: 500; padding: .5rem 1rem; font-size: .92rem; transition: opacity .2s ease; }
+.tab:hover { opacity: .88; }
+.tab[aria-selected="true"] { background: var(--navy); color: var(--navy-fg); }
+.tabbar { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.tabbar .tabs { margin-bottom: 0; }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: .5rem; overflow: hidden; background: var(--card); }
+.lang[hidden] { display: none; }
+.lang button { border: 0; background: transparent; color: var(--fg2); padding: .4rem .75rem; font-size: .82rem; font-weight: 600; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--gold); color: var(--gold-fg); }
+.tr-box { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; justify-content: space-between; padding: .9rem 1.25rem; }
+.tr-box p { min-width: 0; flex: 1 1 18rem; color: var(--fg2); font-size: .92rem; }
+.tab .n { display: inline-block; margin-left: .35rem; font-size: .75rem; font-variant-numeric: tabular-nums; opacity: .75; }
+
+/* Cards */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: .75rem; }
+.stack { display: grid; gap: 1.25rem; }
+.pad { padding: 1.25rem; }
+.card-h { display: flex; align-items: center; gap: .5rem; font-size: 1.1rem; font-weight: 600; }
+.card-h svg { width: 1.25rem; height: 1.25rem; flex: none; stroke: var(--accent); }
+.kv { display: grid; gap: .5rem; }
+.kv li { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: .25rem 1rem; }
+.kv .k { font-weight: 600; }
+.kv .v { min-width: 0; color: var(--fg2); }
+
+.lvl-wrap { border-top: 2px solid var(--gold); padding-top: 1.25rem; }
+.lvl-top { display: flex; justify-content: space-between; align-items: center; gap: .75rem 1.5rem; flex-wrap: wrap; }
+.lvl-cycle { font-size: 1.1rem; font-weight: 600; }
+.lvl-val { text-align: right; }
+.lvl-val b { display: block; font-size: 2.4rem; line-height: 1; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.lvl-val small { display: block; margin-top: .25rem; font-size: .75rem; color: var(--muted); }
+.scale { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .3rem; margin-top: 1.1rem; }
+.sc span { display: block; margin-top: .3rem; font-size: .7rem; text-align: center; color: var(--muted); }
+.seg { height: .55rem; border-radius: .3rem; background: var(--track); overflow: hidden; }
+.seg i { display: block; height: 100%; background: var(--bar); }
+.paras { display: grid; gap: .75rem; margin-top: .75rem; color: var(--fg2); }
+
+/* CEFR table */
+.crit { overflow: hidden; }
+.crit-head, .crit-row { display: grid; grid-template-columns: 10rem minmax(0, 1fr) 8rem; gap: .5rem 1.25rem; padding: .85rem 1.25rem; align-items: start; }
+.crit-head { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-block: .7rem; }
+.crit-row { border-top: 1px solid var(--line); }
+.crit-n { font-weight: 600; font-size: .92rem; min-width: 0; }
+.crit-d { min-width: 0; color: var(--fg2); font-size: .92rem; line-height: 1.55; }
+.grp { margin-top: .45rem; }
+.grp .cl { font-weight: 600; color: var(--fg); }
+.its { display: grid; gap: .3rem; margin-top: .25rem; padding-left: .9rem; border-left: 2px solid var(--line); }
+.its li { min-width: 0; overflow-wrap: anywhere; }
+.qt { font-style: italic; color: var(--fg); }
+.ctx { color: var(--muted); }
+.qq { font-weight: 600; color: var(--fg); }
+.crit-l { min-width: 0; }
+.chip { display: inline-block; background: var(--chip); color: var(--chip-fg); font-weight: 600; font-size: .85rem; padding: .15rem .65rem; border-radius: .4rem; font-variant-numeric: tabular-nums; }
+.chip-note { display: block; margin-top: .25rem; font-size: .72rem; color: var(--muted); font-style: italic; }
+
+/* Professional communication */
+.lead-box { padding: .8rem 1rem; border-left: 3px solid var(--gold); border-radius: .4rem; background: var(--chip); color: var(--fg); }
+.lead-box strong { display: block; margin-bottom: .15rem; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.domains { display: grid; gap: 1.4rem; margin-top: 1.25rem; }
+.dom-t { display: flex; gap: .6rem; align-items: baseline; font-weight: 600; }
+.dom-t .mk { flex: none; color: var(--good); font-weight: 700; }
+.dom-d { margin-top: .2rem; color: var(--fg2); }
+.dom-ex { margin-top: .6rem; }
+.dom-ex > span { font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.dom-ex blockquote { margin: .35rem 0 0; padding: .1rem 0 .1rem .9rem; border-left: 3px solid var(--accent); font-style: italic; color: var(--fg); }
+
+.ev { display: grid; gap: .9rem; margin-top: 1rem; }
+.ev li { display: flex; gap: .6rem; align-items: baseline; }
+.ev .mk { flex: none; color: var(--accent); font-weight: 700; }
+.ev .b { min-width: 0; color: var(--fg2); }
+.notes { display: grid; gap: 1rem; }
+.notes li { padding: .2rem 0 .2rem 1rem; border-left: 3px solid var(--gold); color: var(--fg2); }
+.note { padding: 1.75rem 1.25rem; text-align: center; color: var(--fg2); }
+.note strong { display: block; color: var(--fg); font-size: 1.05rem; margin-bottom: .25rem; }
+
+/* Teacher index */
+.idx-top { display: flex; flex-wrap: wrap; gap: .75rem 1rem; justify-content: space-between; align-items: end; }
+.idx-h { font-size: 1.3rem; font-weight: 700; }
+.lead { margin-top: .4rem; color: var(--fg2); max-width: 42rem; }
+.stu-list { display: grid; gap: .75rem; margin-top: 1.25rem; }
+.stu { padding: 1rem 1.25rem; display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; align-items: center; justify-content: space-between; }
+.stu-main { min-width: 0; }
+.stu-name { font-weight: 600; }
+.stu-name a { color: inherit; text-decoration: none; }
+.stu-name a:hover { text-decoration: underline; }
+.stu-sub { font-size: .85rem; color: var(--muted); }
+.stu-code { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; min-width: 0; }
+.stu-code code { font: 500 .85rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--chip); color: var(--chip-fg); padding: .2rem .55rem; border-radius: .35rem; overflow-wrap: anywhere; }
+.btn { border: 1px solid var(--line); background: var(--card); color: var(--fg); border-radius: .5rem; padding: .3rem .75rem; font-size: .82rem; font-weight: 500; cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.btn-main { background: var(--navy); color: var(--navy-fg); border-color: var(--navy); }
+.btn:disabled { opacity: .5; cursor: default; }
+.newform { margin-top: 1rem; padding: 1rem 1.25rem; display: grid; gap: .75rem; }
+.newform[hidden] { display: none; }
+.newform label { display: grid; gap: .25rem; font-size: .88rem; font-weight: 500; }
+.newform input { padding: .45rem .6rem; border: 1px solid var(--line); border-radius: .4rem; background: var(--card); width: 100%; }
+.newform .row { display: flex; flex-wrap: wrap; gap: .5rem; }
+.form-msg { font-size: .85rem; color: var(--bad); }
+
+
+
+@media (max-width: 600px) {
+  .band h1 { font-size: 1.6rem; }
+  .crit-head { display: none; }
+  .crit-row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "n l" "d d"; padding: .9rem 1rem; }
+  .crit-n { grid-area: n; } .crit-l { grid-area: l; text-align: right; } .crit-d { grid-area: d; }
+  .pad { padding: 1rem; }
+  .kv li { grid-template-columns: minmax(0, 1fr); }
+  .lvl-val { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) { .tab { transition: none; } }
+</style>
+</head>
+<body>
+<header class="band">
+  <div class="wrap">
+    <p class="wordmark">English for Work. <span>And Beyond.</span></p>
+    <h1 id="title">English Assessment</h1>
+    <ul class="meta" id="meta"></ul>
+    <a class="admin-link" id="all-link" href="#" hidden>All assessments</a>
+    
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="msg" class="card note" role="status"><strong>Loading the assessment</strong>This takes a few seconds.</div>
+  <div id="report" hidden>
+    <div class="tabbar"><div class="tabs" id="tabs" role="tablist" aria-label="Report sections"></div><div class="lang" id="lang" role="group" aria-label="Language" hidden><button type="button" data-lang="en" aria-pressed="true">English</button><button type="button" data-lang="pt" aria-pressed="false">Português</button></div></div>
+    <div class="stack" id="panel" role="tabpanel"></div>
+  </div>
+  <div id="index" hidden></div>
+</main>
+
+
+
+<script>
+(function () {
+  'use strict';
+  var COL = 'assessments';
+  var LV = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+  var TABS = [
+    ['overview', 'Overview'],
+    ['profile', 'CEFR Profile'],
+    ['pro', 'Professional Communication'],
+    ['further', 'Further Evidence'],
+    ['notes', 'Notes']
+  ];
+  var L = {
+    en: { overview: 'Overview', profile: 'CEFR Profile', pro: 'Professional Communication', further: 'Further Evidence', notes: 'Notes',
+      position: 'Position', focus: 'Assessment focus', framework: 'Reference framework', overall: 'Estimated Overall Level', cefr: 'CEFR level',
+      spoken: 'Spoken Language - CEFR-Based Profile', dim: 'CEFR dimension', perf: 'Observed performance', est: 'Estimated level',
+      ext: 'Extended Candidate Example', req: 'Requires further evidence', cand: 'Candidate', date: 'Date', ov: 'Overall' },
+    pt: { overview: 'Visão geral', profile: 'Perfil CEFR', pro: 'Comunicação Profissional', further: 'Evidências Adicionais', notes: 'Notas',
+      position: 'Cargo', focus: 'Foco da avaliação', framework: 'Referencial', overall: 'Nível Geral Estimado', cefr: 'Nível CEFR',
+      spoken: 'Língua Falada - Perfil com Base no CEFR', dim: 'Dimensão CEFR', perf: 'Desempenho observado', est: 'Nível estimado',
+      ext: 'Exemplo Estendido do Candidato', req: 'Requer evidências adicionais', cand: 'Candidato', date: 'Data', ov: 'Geral' }
+  };
+  function T(k) { return L[S.lang][k] || L.en[k]; }
+  var S = { lang: 'en', db: null, canEdit: false, mode: '', doc: null, tab: 'overview', unsub: null, timer: null, ready: false, edit: null };
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* ---------- edit hooks: plain text for readers, pencil / trash / add for the teacher ---------- */
+  function ON() { return !!(S.edit && S.edit.on); }
+  /* in Portuguese every content path lives under pt. (name and date are shared) */
+  function PP(path) { return S.lang === 'pt' && !/^(name|date)$/.test(path) ? 'pt.' + path : path; }
+  function E(path, text, ph) { return ON() ? S.edit.field(PP(path), text, ph) : esc(text); }
+  function X(path) { return ON() ? S.edit.trash(PP(path)) : ''; }
+  function A(path, tpl, label) { return ON() ? S.edit.add(PP(path), tpl, label) : ''; }
+  function raw() { return (ON() && S.edit.draft) || S.doc; }
+  function hasPt(d) { return !!(d && d.pt && d.pt.dims); }
+  function data() { var d = raw(); if (S.lang === 'pt' && hasPt(d)) return Object.assign({}, d, d.pt); return d; }
+  /* optional text: shows only when filled, or as a placeholder in edit mode */
+  function O(path, text, ph, wrapL, wrapR) {
+    if (text) return (wrapL || '') + E(path, text) + (wrapR || '');
+    return ON() ? (wrapL || '') + E(path, '', ph) + (wrapR || '') : '';
+  }
+
+  function parseLevel(l) {
+    var m = /(A1|A2|B1|B2|C1|C2)(\+)?/g, r, last = null;
+    while ((r = m.exec(l || ''))) last = { i: LV.indexOf(r[1]), h: !!r[2] };
+    return last;
+  }
+  function scale(l) {
+    var p = parseLevel(l);
+    if (!p) return '';
+    var o = '<div class="scale" role="img" aria-label="Level ' + esc(l) + ' on a scale from A1 to C2">';
+    LV.forEach(function (n, i) {
+      var w = i <= p.i ? '100%' : (p.h && i === p.i + 1 ? '50%' : '0%');
+      o += '<div class="sc"><div class="seg"><i style="width:' + w + '"></i></div><span>' + n + '</span></div>';
+    });
+    return o + '</div>';
+  }
+
+  /* one item inside a group: q (question, bold), s (quote, italic), t (plain text), x (context in brackets) */
+  function item(it, p) {
+    var h = '';
+    if (it.q || (ON() && 'q' in it)) h += '<span class="qq">' + E(p + '.q', it.q, 'question') + '</span> ';
+    if (it.s != null) h += '<span class="qt">“' + E(p + '.s', it.s, 'quote') + '”</span>';
+    if (it.t != null) h += E(p + '.t', it.t, 'text');
+    h += O(p + '.x', it.x, 'add context', ' <span class="ctx">(', ')</span>');
+    return '<li>' + h + X(p) + '</li>';
+  }
+  function groups(gs, p) {
+    return (gs || []).map(function (g, i) {
+      var gp = p + '.' + i;
+      return '<div class="grp"><span class="cl">' + E(gp + '.c', g.c, 'label') + ':</span>' + X(gp) +
+        '<ul class="its">' + (g.items || []).map(function (it, j) { return item(it, gp + '.items.' + j); }).join('') + '</ul>' +
+        (ON() ? '<div class="adds">' + A(gp + '.items', 'quote', 'quote') + A(gp + '.items', 'text', 'text') + A(gp + '.items', 'answer', 'written answer') + '</div>' : '') +
+        '</div>';
+    }).join('') + (ON() ? '<div class="adds">' + A(p, 'group', 'example group') + '</div>' : '');
+  }
+
+  var ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>';
+
+  /* ---------- sections ---------- */
+  function overview(d) {
+    var ov = d.overall || {};
+    var fw = d.framework || {};
+    var link = fw.url && /^https:\/\//i.test(fw.url) ? ' (<a href="' + esc(fw.url) + '" target="_blank" rel="noopener">' + esc(fw.url) + '</a>)' : '';
+    var fwH = E('framework.t', fw.t, 'framework') + (ON() ? '<br><small>Link: ' + E('framework.url', fw.url, 'add https link') + '</small>' : link);
+    var h = '<section class="card pad"><ul class="kv">' +
+      '<li><span class="k">' + T('position') + '</span><span class="v">' + E('position', d.position, 'add position') + '</span></li>' +
+      '<li><span class="k">' + T('focus') + '</span><span class="v">' + E('focus', d.focus, 'add focus') + '</span></li>' +
+      '<li><span class="k">' + T('framework') + '</span><span class="v">' + fwH + '</span></li></ul></section>';
+    h += '<section class="lvl-wrap"><div class="card pad"><div class="lvl-top"><span class="lvl-cycle">' + T('overall') + '</span>' +
+      '<div class="lvl-val"><b>' + E('overall.lv', ov.lv, 'level') + '</b><small>' + T('cefr') + '</small></div></div>' + scale(ov.lv) +
+      '<div class="paras">' + (ov.paras || []).map(function (p, i) { return '<p>' + E('overall.paras.' + i, p) + X('overall.paras.' + i) + '</p>'; }).join('') + '</div>' +
+      A('overall.paras', 'para', 'paragraph') + '</div></section>';
+    return h;
+  }
+  function profile(d) {
+    var dims = d.dims || [];
+    return '<section class="card crit" aria-label="' + T('spoken') + '"><div class="pad" style="padding-bottom:.4rem"><h2 class="card-h">' + ICON_INFO + T('spoken') + '</h2></div>' +
+      '<div class="crit-head" aria-hidden="true"><span>' + T('dim') + '</span><span>' + T('perf') + '</span><span>' + T('est') + '</span></div><ul>' +
+      dims.map(function (c, i) {
+        var p = 'dims.' + i;
+        return '<li class="crit-row"><div class="crit-n">' + E(p + '.n', c.n) + X(p) + '</div><div class="crit-d">' + E(p + '.d', c.d, 'add description') +
+          groups(c.groups, p + '.groups') + '</div><div class="crit-l"><span class="chip">' + E(p + '.lv', c.lv, 'level') + '</span>' +
+          O(p + '.note', c.note, 'add note', '<span class="chip-note">', '</span>') + '</div></li>';
+      }).join('') + '</ul>' + (ON() ? '<div class="pad" style="padding-top:0">' + A('dims', 'dim', 'dimension') + '</div>' : '') + '</section>';
+  }
+  function pro(d) {
+    var st = d.strong || {};
+    var h = '<section class="card pad"><h2 class="card-h">' + ICON_INFO + T('pro') + '</h2>' +
+      '<div class="lead-box" style="margin-top:.9rem"><p>' + E('strong.intro', st.intro, 'add summary') + '</p></div>' +
+      '<div class="domains">' + (st.domains || []).map(function (m, i) {
+        var p = 'strong.domains.' + i;
+        return '<div><p class="dom-t"><span class="mk" aria-hidden="true">✔</span><span>' + E(p + '.t', m.t) + '</span>' + X(p) + '</p>' +
+          '<p class="dom-d">' + E(p + '.d', m.d, 'add description') + '</p>' +
+          '<div class="dom-ex"><span>' + T('ext') + '</span><blockquote>' + E(p + '.ex', m.ex, 'add quote') + '</blockquote></div></div>';
+      }).join('') + '</div>' + A('strong.domains', 'domain', 'domain') + '</section>';
+    return h;
+  }
+  function further(d) {
+    var f = d.further || {};
+    return '<section class="card pad"><h2 class="card-h">' + ICON_INFO + T('req') + '</h2>' +
+      '<p style="margin-top:.6rem;color:var(--fg2)">' + E('further.intro', f.intro, 'add summary') + '</p>' +
+      '<ul class="ev">' + (f.items || []).map(function (it, i) {
+        var p = 'further.items.' + i, h = '<span class="qq">' + E(p + '.c', it.c, 'category') + ':</span> ';
+        if (it.s != null) h += '<span class="qt">“' + E(p + '.s', it.s, 'quote') + '”</span>';
+        if (it.t != null) h += E(p + '.t', it.t, 'text');
+        h += O(p + '.x', it.x, 'add correction', ' <span class="ctx">(', ')</span>');
+        return '<li><span class="mk" aria-hidden="true">→</span><span class="b">' + h + X(p) + '</span></li>';
+      }).join('') + '</ul>' + (ON() ? '<div class="adds">' + A('further.items', 'fquote', 'item with quote') + A('further.items', 'ftext', 'text item') + '</div>' : '') + '</section>';
+  }
+  function notes(d) {
+    return '<section class="card pad"><ul class="notes">' + (d.notes || []).map(function (n, i) {
+      return '<li>' + E('notes.' + i, n) + X('notes.' + i) + '</li>';
+    }).join('') + '</ul>' + A('notes', 'note', 'note') + '</section>';
+  }
+  var PAINT = { overview: overview, profile: profile, pro: pro, further: further, notes: notes };
+  function count(d, k) {
+    if (k === 'profile') return (d.dims || []).length;
+    if (k === 'pro') return (d.strong && d.strong.domains || []).length;
+    if (k === 'further') return (d.further && d.further.items || []).length;
+    if (k === 'notes') return (d.notes || []).length;
+    return 0;
+  }
+
+  /* ---------- views ---------- */
+  function show(which) {
+    $('msg').hidden = which !== 'msg';
+    $('report').hidden = which !== 'report';
+    $('index').hidden = which !== 'index';
+    if (which !== 'report') { $('title').textContent = 'English Assessment'; if (which === 'index') $('meta').innerHTML = ''; }
+    if (S.edit) S.edit.sync();
+  }
+  function message(title, text) { $('msg').innerHTML = '<strong>' + esc(title) + '</strong>' + esc(text || ''); show('msg'); }
+  function paintHead(d) {
+    $('title').innerHTML = E('title', d.title, 'add title');
+    var bits = [];
+    if (d.name || ON()) bits.push('<li>' + T('cand') + ': ' + E('name', d.name, 'add name') + '</li>');
+    if (d.date || ON()) bits.push('<li>' + T('date') + ': ' + E('date', d.date, 'add date') + '</li>');
+    if (d.overall && d.overall.lv) bits.push('<li>' + T('ov') + ': ' + esc(d.overall.lv) + '</li>');
+    $('meta').innerHTML = bits.join('');
+  }
+  function buildTabs(d) {
+    $('tabs').innerHTML = TABS.map(function (t) {
+      var n = count(d, t[0]);
+      return '<button class="tab" role="tab" id="tab-' + t[0] + '" data-tab="' + t[0] + '" aria-controls="panel" aria-selected="' + (S.tab === t[0]) + '">' +
+        esc(T(t[0])) + (n ? '<span class="n">' + n + '</span>' : '') + '</button>';
+    }).join('');
+    $('panel').setAttribute('aria-labelledby', 'tab-' + S.tab);
+  }
+  function paintPanel() {
+    if (S.edit) S.edit.flush();
+    var r = raw();
+    if (!r) return;
+    var pt = hasPt(r);
+    if (S.lang === 'pt' && !pt && !ON()) S.lang = 'en';
+    document.documentElement.lang = S.lang === 'pt' ? 'pt-BR' : 'en';
+    $('lang').hidden = !(pt || ON());
+    Array.prototype.forEach.call($('lang').children, function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === S.lang)); });
+    var d = data();
+    paintHead(d);
+    buildTabs(d);
+    var top = '';
+    if (S.lang === 'pt' && ON()) {
+      top = '<section class="card tr-box"><p>' + (pt ?
+        'Versão em português. Edite aqui com o lápis, ou traduza de novo a partir do inglês (substitui esta tradução). As citações do candidato ficam em inglês.' :
+        'Este relatório ainda não tem versão em português. O Claude traduz todos os textos; as citações do candidato ficam em inglês.') +
+        '</p><button type="button" class="btn btn-main" data-translate="1">' + (pt ? 'Traduzir de novo' : 'Traduzir com o Claude') + '</button></section>';
+      if (!pt) { $('panel').innerHTML = top; return; }
+    }
+    $('panel').innerHTML = top + PAINT[S.tab](d);
+  }
+  function paintReport() {
+    if (S.edit && S.edit.hold()) return;
+    if (!S.doc) { message('No assessment found', 'Check the link you received.'); return; }
+    paintPanel();
+    show('report');
+  }
+  /* ---------- data: one encrypted file per assessment ---------- */
+  var ENC = new TextEncoder(), DEC = new TextDecoder(), ITER = 200000, SALT = 'english-assessment-reports-v1';
+  function unb64(s) { var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+  function hex(u8) { return Array.prototype.map.call(u8, function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); }
+  async function openReport(code) {
+    var base = await crypto.subtle.importKey('raw', ENC.encode(code), 'PBKDF2', false, ['deriveBits']);
+    var bits = new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: ENC.encode(SALT), iterations: ITER, hash: 'SHA-256' }, base, 384));
+    var res = await fetch('data/' + hex(bits.slice(32, 48)) + '.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('missing');
+    var pk = await res.json();
+    var key = await crypto.subtle.importKey('raw', bits.slice(0, 32), 'AES-GCM', false, ['decrypt']);
+    var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(pk.iv) }, key, unb64(pk.ct));
+    return JSON.parse(DEC.decode(plain));
+  }
+  function route() {
+    var code = (location.hash || '').replace(/^#/, '');
+    $('all-link').hidden = true;
+    S.doc = null; S.ready = false; S.mode = 'report';
+    if (!/^[a-z0-9][a-z0-9-]{9,60}$/i.test(code)) {
+      message('Open your personal link', 'The link you received ends in your own code. Use that link to see the report.');
+      return;
+    }
+    if (!(window.crypto && window.crypto.subtle)) {
+      message('This browser cannot open the report', 'Try again in an up-to-date browser, using the https link.');
+      return;
+    }
+    message('Loading the assessment', 'This takes a few seconds.');
+    openReport(code).then(function (doc) {
+      if (code !== (location.hash || '').replace(/^#/, '')) return;
+      S.doc = Object.assign({}, doc, { _id: code });
+      S.ready = true;
+      paintReport();
+    }, function () {
+      message('We could not open this report', 'Check that you opened the full link you received. If it keeps happening, tell the assessor.');
+    });
+  }
+
+  /* ---------- events ---------- */
+  $('tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tab]');
+    if (!b) return;
+    if (S.edit) S.edit.flush();
+    S.tab = b.getAttribute('data-tab');
+    paintPanel();
+    if (S.edit) S.edit.sync();
+  });
+  $('tabs').addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var i = TABS.map(function (t) { return t[0]; }).indexOf(S.tab);
+    i = (i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length;
+    S.tab = TABS[i][0]; paintPanel(); var t = $('tab-' + S.tab); if (t) t.focus();
+  });
+  $('lang').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-lang]');
+    if (!b || b.getAttribute('data-lang') === S.lang) return;
+    if (S.edit) S.edit.flush();
+    S.lang = b.getAttribute('data-lang');
+    paintPanel();
+    if (S.edit) S.edit.sync();
+  });
+  window.addEventListener('hashchange', route);
+
+  
+
+  /* ---------- start ---------- */
+  route();
+})();
+</script>
+</body>
+</html>
