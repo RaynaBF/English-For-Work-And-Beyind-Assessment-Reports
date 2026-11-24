@@ -10,7 +10,8 @@ the "#" in the link, so only that link opens the report.
 usage:
   build_assessment.py --page ARTIFACT_INDEX_HTML --seed DIR_WITH_RECORDS --codes CODES_JSON --out REPO_DIR
 
-CODES_JSON stays outside the repository. Format:
+CODES_JSON stays outside the repository. The record id (the code the artifact shows) always opens
+its report; "static" adds extra codes. Format:
   { "<record id>": { "static": "<code used in the link>" or ["<code>", ...], "file": "<record>.json" } }
 Codes are matched lowercase; prefer letters and digits that cannot be mixed up (no 0/o, 1/l/i).
 """
@@ -150,7 +151,10 @@ def main():
     keep = set()
     for rec_id, info in codes.items():
         doc = json.load(open(os.path.join(a.seed, info['file']), encoding='utf-8'))
-        statics = info['static'] if isinstance(info['static'], list) else [info['static']]
+        statics = info.get('static', [])
+        statics = statics if isinstance(statics, list) else [statics]
+        if rec_id not in statics:  # the code shown in the artifact always opens the report too
+            statics = [rec_id] + statics
         for code in statics:
             fid, pk = pack(code.lower(), doc)
             keep.add(fid + '.json')

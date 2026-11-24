@@ -177,6 +177,7 @@ main { padding-block: 1.5rem 3.5rem; }
     <ul class="meta" id="meta"></ul>
     <a class="admin-link" id="all-link" href="#" hidden>All assessments</a>
     
+    
   </div>
 </header>
 
@@ -345,6 +346,7 @@ main { padding-block: 1.5rem 3.5rem; }
     $('msg').hidden = which !== 'msg';
     $('report').hidden = which !== 'report';
     $('index').hidden = which !== 'index';
+    if (which !== 'report' && $('site-line')) $('site-line').hidden = true;
     if (which !== 'report') { $('title').textContent = 'English Assessment'; if (which === 'index') $('meta').innerHTML = ''; }
     if (S.edit) S.edit.sync();
   }
@@ -356,6 +358,11 @@ main { padding-block: 1.5rem 3.5rem; }
     if (d.date || ON()) bits.push('<li>' + T('date') + ': ' + E('date', d.date, 'add date') + '</li>');
     if (d.overall && d.overall.lv) bits.push('<li>' + T('ov') + ': ' + esc(d.overall.lv) + '</li>');
     $('meta').innerHTML = bits.join('');
+    var sl = $('site-line');
+    if (sl) {
+      sl.hidden = !(S.canEdit && S.doc);
+      if (!sl.hidden) sl.innerHTML = 'Code for the site: <code>' + esc(S.doc._id) + '</code><button type="button" data-copy-site="' + esc(S.doc._id) + '">Copy code</button><button type="button" data-copy-site="' + esc(SITE + '#' + S.doc._id) + '">Copy site link</button>';
+    }
   }
   function buildTabs(d) {
     $('tabs').innerHTML = TABS.map(function (t) {
